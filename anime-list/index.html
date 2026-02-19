@@ -2,8 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Anime Table - Search by Name</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Collectors Anime-List</title>
+<meta name="title" content="Collectors Anime-List">
+<meta name="description" content="Explore my personal archive of anime series and movies. Real-time updates on seasons, episode counts, and airing status.">
+
+<meta name="theme-color" content="#1a2a3a">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://collectors-info.github.io/anime-list/">
+<meta property="og:title" content="Collectors Anime-List">
+<meta property="og:description" content="Explore my personal archive of anime series and movies. Real-time updates on seasons, episode counts, and airing status.">
+<meta property="og:image" content="https://collectors-info.github.io/anime-list/logo.png">
+
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://collectors-info.github.io/anime-list/">
+<meta property="twitter:title" content="Collectors Anime-List">
+<meta property="twitter:description" content="Explore my personal archive of anime series and movies. Real-time updates on seasons, episode counts, and airing status.">
+<meta property="twitter:image" content="https://collectors-info.github.io/anime-list/logo.png">
 <style>
 *{
   padding: 0;
@@ -168,10 +184,12 @@ thead th {
   background: #b30000; 
 }
 
-.inner-table .ongoing{
-  background-color: yellow;
+/* Change your .ongoing class to this */
+.inner-table .ongoing {
+  background-color: #e8f5e9 !important; /* Soft Green */
+  color: #2e7d32; /* Dark Green Text */
   font-weight: bold;
-  text-shadow: 0px 0px 2px rgba(0,0,0,0.2);
+  position: relative;
 }
 
 .legend-container {
@@ -221,11 +239,25 @@ thead th {
     text-align: center;
   }
 }
+
+.site-logo {
+    display: block;
+    margin: 10px auto;
+    max-width: 150px;
+    filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.1)); /* Adds depth without ruining quality */
+    transition: transform 0.3s ease;
+}
+
+.site-logo:hover {
+    transform: scale(1.05); /* Makes it slightly grow when hovered */
+}
 </style>
 </head>
 <body>
 
-<h1>Anime Table</h1>
+<a href="https://collectors-info.github.io/anime-list/">
+  <img src="hlogo.png" alt="Collectors Anime-List" class="site-logo">
+</a>
 
 <div class="search-container">
   <input type="text" id="searchInput" placeholder="Search Anime Name...">
@@ -313,6 +345,24 @@ fetch("anime-data.json")
 function renderTable(data, highlight = "") {
   tableBody.innerHTML = "";
 
+// Check if data is empty
+  if (data.length === 0) {
+    const emptyRow = document.createElement("tr");
+    emptyRow.innerHTML = `
+      <td colspan="4" style="text-align: center; padding: 40px; color: #666;">
+        <div style="font-size: 24px; margin-bottom: 10px;">🔍</div>
+        No anime found matching your search.
+      </td>
+    `;
+    tableBody.appendChild(emptyRow);
+    return; // Exit the function early
+  }
+
+  // ... (the rest of your existing data.forEach code)
+  data.forEach((anime, index) => {
+    // your existing row creation logic
+  });
+
   data.forEach((anime, index) => {
     const row = document.createElement("tr");
 
@@ -396,7 +446,7 @@ renderTable(animeData);
 // Search only by name
 const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("input", () => {
-  const query = searchInput.value.trim();
+ const query = searchInput.value.trim();
 
   // clear number input
   document.getElementById("rowNumber").value = "";
