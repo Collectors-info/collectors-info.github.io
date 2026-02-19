@@ -269,13 +269,26 @@ fetch("anime-data.json")
   .then(response => {
     if (!response.ok) throw new Error("JSON load failed");
 
-    // 1. Get the last modified date from the headers of THIS request
+    // 1. Get the last modified date AND time from the headers
     const lastMod = response.headers.get("Last-Modified");
     const dateDisplay = document.getElementById("lastUpdated");
+    
     if (lastMod) {
-      dateDisplay.textContent = new Date(lastMod).toLocaleDateString();
+      const date = new Date(lastMod);
+      // Formats to: Feb 19, 2026, 10:45 AM
+      dateDisplay.textContent = date.toLocaleString('en-US', { 
+        month: 'short', 
+        day: 'numeric', 
+        year: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: true 
+      });
     } else {
-      dateDisplay.textContent = "Recently"; 
+      // Fallback: If server hides headers, show the current time of fetch
+      dateDisplay.textContent = new Date().toLocaleString('en-US', { 
+        month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true 
+      });
     }
 
     return response.json();
@@ -283,16 +296,18 @@ fetch("anime-data.json")
   .then(data => {
     animeData = data;
     
-    // 2. Update a "Total Count" if you have a span for it
-    // Example: <span id="totalCount"></span>
-    if(document.getElementById("totalCount")) {
-       document.getElementById("totalCount").textContent = data.length;
+    // 2. Update Total Count
+    const countDisplay = document.getElementById("totalCount");
+    if(countDisplay) {
+       countDisplay.textContent = data.length;
     }
 
     renderTable(animeData);
   })
   .catch(error => {
     console.error("Error loading anime JSON:", error);
+    const dateDisplay = document.getElementById("lastUpdated");
+    if(dateDisplay) dateDisplay.textContent = "Error loading date";
   });
 
 function renderTable(data, highlight = "") {
