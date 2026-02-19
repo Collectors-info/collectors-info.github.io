@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Collectors Anime-List</title>
 <meta name="title" content="Collectors Anime-List">
-<meta name="description" content="Explore my personal archive of anime series and movies. Real-time updates on seasons, episode counts, and airing status.">
+<meta name="description" content="Collectors Anime-List: A complete, searchable directory of Hindi dubbed anime. Track seasons, episode counts, and airing status in your native language.">
 
 <meta name="theme-color" content="#1a2a3a">
 
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://collectors-info.github.io/anime-list/">
 <meta property="og:title" content="Collectors Anime-List">
-<meta property="og:description" content="Explore my personal archive of anime series and movies. Real-time updates on seasons, episode counts, and airing status.">
+<meta name="description" content="Collectors Anime-List: A complete, searchable directory of Hindi dubbed anime. Track seasons, episode counts, and airing status in your native language.">
 <meta property="og:image" content="https://collectors-info.github.io/anime-list/logo.png">
 
 <meta property="twitter:card" content="summary_large_image">
 <meta property="twitter:url" content="https://collectors-info.github.io/anime-list/">
 <meta property="twitter:title" content="Collectors Anime-List">
-<meta property="twitter:description" content="Explore my personal archive of anime series and movies. Real-time updates on seasons, episode counts, and airing status.">
+<meta name="description" content="Collectors Anime-List: A complete, searchable directory of Hindi dubbed anime. Track seasons, episode counts, and airing status in your native language.">
 <meta property="twitter:image" content="https://collectors-info.github.io/anime-list/logo.png">
 <style>
 *{
@@ -30,12 +30,6 @@
 body {
   font-family: Arial, sans-serif;
   background: #f4f7f9;
-}
-
-h1 {
-  text-align: center;
-  color: #333;
-  margin-bottom: 20px;
 }
 
 table {
@@ -55,7 +49,6 @@ table thead th {
 }
 
 th, td {
-  border: 1px solid #ccc;
   padding: 10px 14px;
   vertical-align: top;
 }
@@ -137,15 +130,10 @@ button {
 }
 
 .table-wrapper {
-  max-height: 65vh;
+  max-height: 60vh;
   overflow-y: auto;
   border-radius: 8px;
-}
-
-thead th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
+  border: 1px solid #ccc;
 }
 
 #goBtn {
@@ -274,6 +262,8 @@ thead th {
   </div>
   <div class="dates">
     <span><strong>Total:</strong> <span id="totalCount">0</span> Anime</span>
+    <span> | </span>
+    <span><strong>Audio:</strong> <span style="color: #2e7d32;">Hindi Dubbed 🎙️</span></span>
     <span> | </span>
     <span><strong>Updated:</strong> <span id="lastUpdated">...</span></span>
   </div>
