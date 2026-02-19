@@ -130,10 +130,11 @@ button {
 }
 
 .table-wrapper {
-  max-height: 60vh;
-  overflow-y: auto;
+  max-height: 69vh;
+  overflow: auto;
   border-radius: 8px;
   border: 1px solid #ccc;
+  margin-bottom: 100px;
 }
 
 #goBtn {
@@ -163,7 +164,7 @@ button {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: red; 
+  background: red;
   border-radius: 10px;
 }
 
@@ -174,8 +175,8 @@ button {
 
 /* Change your .ongoing class to this */
 .inner-table .ongoing {
-  background-color: #e8f5e9 !important; /* Soft Green */
-  color: #2e7d32; /* Dark Green Text */
+  background-color: #ffcc00 !important; /* Soft Green */
+  color: #000;
   font-weight: bold;
   position: relative;
 }
@@ -198,7 +199,7 @@ button {
   background: #fff;
   border-radius: 8px;
   border: 1px solid #eee;
-  font-size: 13px;
+  font-size: 12px;
   color: #666;
 }
 
@@ -211,7 +212,7 @@ button {
 .color-box {
   width: 16px;
   height: 16px;
-  background-color: yellow;
+  background-color: #ffcc00 ;
   border: 1px solid #ccc;
   display: inline-block;
 }
@@ -239,6 +240,62 @@ button {
 .site-logo:hover {
     transform: scale(1.05); /* Makes it slightly grow when hovered */
 }
+
+.whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: #25D366; /* Official WhatsApp Green */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 12px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.whatsapp-btn:hover {
+    background-color: #128C7E; /* Darker Green on Hover */
+    transform: scale(1.05);
+    color: white;
+}
+
+@media (max-width: 600px) {
+    .whatsapp-btn {
+        width: 90%; /* Full width on mobile for easier clicking */
+        justify-content: center;
+        margin-left: 1%;
+    }
+}
+
+/* Styling for the new Search Panel */
+#searchPanel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out, opacity 0.3s;
+    opacity: 0;
+}
+
+#searchPanel.open {
+   max-height: 1000px; /* Adjust height based on your content */
+    opacity: 1;
+    padding-bottom: 10px;
+}
+
+#toggleSearch {
+    font-size: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: 0.3s;
+}
+
+#toggleSearch:hover {
+    transform: scale(1.05);
+}
+
+#main-container{
+  display: flex;
+}
 </style>
 </head>
 <body>
@@ -246,14 +303,6 @@ button {
 <a href="https://collectors-info.github.io/anime-list/">
   <img src="hlogo.png" alt="Collectors Anime-List" class="site-logo">
 </a>
-
-<div class="search-container">
-  <input type="text" id="searchInput" placeholder="Search Anime Name...">
-</div>
-<div class="search-container">
-  <input type="number" id="rowNumber" placeholder="Enter row number" min="1">
-  <button id="goBtn">Go</button>
-</div>
 
 <div class="info-bar">
   <div class="legend">
@@ -269,6 +318,23 @@ button {
   </div>
 </div>
 
+<div id="main-container" style="text-align: center; margin: 10px 0;">
+   <a href="https://whatsapp.com/channel/YOUR_LINK" class="whatsapp-btn">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="24" height="24" alt="WhatsApp">
+    &nbsp;Join WhatsApp Channel</a>
+<button id="toggleSearch" style="background: #007bff; color: white;  border-radius: 50px; display: inline-flex; align-items: center;">
+    <span id="searchIcon">🔍</span></button>
+</div>
+
+<div id="searchPanel">
+    <div class="search-container">
+        <input type="number" id="rowNumber" placeholder="Enter row number" min="1">
+        <button id="goBtn">Go</button>
+    </div>
+    <div class="search-container" style="margin-top: 15px;">
+        <input type="text" id="searchInput" placeholder="Search Anime Name...">
+    </div></div>
+
 <div class="table-wrapper">
   <table>
     <thead>
@@ -282,10 +348,30 @@ button {
     <tbody id="animeBody"></tbody>
   </table>
 </div>
-
 <script>
 const tableBody = document.getElementById("animeBody");
 let animeData = []; // keep global, same name your code already uses
+
+const toggleSearch = document.getElementById("toggleSearch");
+const searchPanel = document.getElementById("searchPanel");
+const searchIcon = document.getElementById("searchIcon");
+
+toggleSearch.addEventListener("click", () => {
+    searchPanel.classList.toggle("open");
+    
+    if (searchPanel.classList.contains("open")) {
+        searchIcon.textContent = "✖️";
+        toggleSearch.style.background = "#6c757d"; // Change to grey when open
+        
+        // Auto-focus the search input when opened
+        setTimeout(() => document.getElementById("searchInput").focus(), 300);
+    } else {
+        searchIcon.textContent = "🔍";
+        toggleSearch.style.background = "#007bff";
+          document.getElementById("rowNumber").value = "";
+          searchInput.value = "";
+    }
+});
 
 fetch("anime-data.json")
   .then(response => {
