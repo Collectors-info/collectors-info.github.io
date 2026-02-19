@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Anime Table - Search by Name</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f7f9;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+table {
+  table-layout: auto;
+  width: 130%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-size: small;
+}
+
+table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  background: #007bff;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px 14px;
+  vertical-align: top;
+}
+
+th {
+  background: #007bff;
+  color: #fff;
+}
+
+tr:nth-child(even) {
+  background: #f0f4f8;
+}
+
+tr>td:nth-child(4) {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button {
+  margin: 2px 3px;
+  padding: 5px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.copy-btn {
+  background: #28a745;
+  color: #fff;
+}
+
+.copy-btn:hover {
+  background: #218838;
+}
+
+.search-btn {
+  background: #ffc107;
+  color: #333;
+}
+
+.search-btn:hover {
+  background: #e0a800;
+}
+
+.inner-table {
+  width: 100%;
+  margin: 0;
+}
+
+.inner-table th, .inner-table td {
+  border: 1px solid #ccc;
+  padding: 4px 6px;
+  text-align: center;
+  background: #fff;
+}
+
+.inner-table th {
+  background: #007bff;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+.search-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.search-container input {
+  width: 75%;
+  padding: 8px 12px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.table-wrapper {
+  max-height: 65vh;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+#goBtn {
+  padding: 8px 12px;
+  margin-left: 5px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#goBtn:hover {
+  background: #0056b3;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: red; 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #b30000; 
+}
+
+.inner-table .ongoing{
+  background-color: yellow;
+  font-weight: bold;
+  text-shadow: 0px 0px 2px rgba(0,0,0,0.2);
+}
+
+.legend-container {
+  background: #fff;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  color: #555;
+}
+
+.info-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: 0 auto 10px auto;
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #eee;
+  font-size: 13px;
+  color: #666;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.color-box {
+  width: 16px;
+  height: 16px;
+  background-color: yellow;
+  border: 1px solid #ccc;
+  display: inline-block;
+}
+
+.dates strong {
+  color: #333;
+}
+
+@media (max-width: 600px) {
+  .info-bar {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+}
+</style>
+</head>
+<body>
+
+<h1>Anime Table</h1>
+
+<div class="search-container">
+  <input type="text" id="searchInput" placeholder="Search Anime Name...">
+</div>
+<div class="search-container">
+  <input type="number" id="rowNumber" placeholder="Enter row number" min="1">
+  <button id="goBtn">Go</button>
+</div>
+
+<div class="info-bar">
+  <div class="legend">
+    <span class="color-box"></span>
+    <span>= Ongoing Season</span>
+  </div>
+  <div class="dates">
+    <span><strong>Total:</strong> <span id="totalCount">0</span> Anime</span>
+    <span> | </span>
+    <span><strong>Updated:</strong> <span id="lastUpdated">...</span></span>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Anime Name</th>
+        <th>Seasons / Episodes</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="animeBody"></tbody>
+  </table>
+</div>
+
+<script>
+const tableBody = document.getElementById("animeBody");
+let animeData = []; // keep global, same name your code already uses
+
+fetch("anime-data.json")
+  .then(response => {
+    if (!response.ok) throw new Error("JSON load failed");
+
+    // 1. Get the last modified date from the headers of THIS request
+    const lastMod = response.headers.get("Last-Modified");
+    const dateDisplay = document.getElementById("lastUpdated");
+    if (lastMod) {
+      dateDisplay.textContent = new Date(lastMod).toLocaleDateString();
+    } else {
+      dateDisplay.textContent = "Recently"; 
+    }
+
+    return response.json();
+  })
+  .then(data => {
+    animeData = data;
+    
+    // 2. Update a "Total Count" if you have a span for it
+    // Example: <span id="totalCount"></span>
+    if(document.getElementById("totalCount")) {
+       document.getElementById("totalCount").textContent = data.length;
+    }
+
+    renderTable(animeData);
+  })
+  .catch(error => {
+    console.error("Error loading anime JSON:", error);
+  });
+
+function renderTable(data, highlight = "") {
+  tableBody.innerHTML = "";
+
+  data.forEach((anime, index) => {
+    const row = document.createElement("tr");
+
+    // 🔢 Number column
+    const noCell = document.createElement("td");
+    noCell.textContent = index + 1;
+    row.appendChild(noCell);
+
+    // Anime Name
+    const nameCell = document.createElement("td");
+    if (highlight) {
+      const regex = new RegExp(`(${highlight})`, "gi");
+      nameCell.innerHTML = anime.name.replace(regex, `<span class="highlight">$1</span>`);
+    } else {
+      nameCell.textContent = anime.name;
+    }
+    row.appendChild(nameCell);
+
+    // Seasons / Episodes (inner table)
+    const seCell = document.createElement("td");
+    const innerTable = document.createElement("table");
+    innerTable.className = "inner-table";
+
+    const headerRow = document.createElement("tr");
+    headerRow.innerHTML = "<th>S</th><th>E</th>";
+    innerTable.appendChild(headerRow);
+
+const entries = Object.entries(anime.seasons);
+
+entries.forEach(([season, ep], index) => {
+  const tr = document.createElement("tr");
+
+  // Check if it's the last item AND the status is "ongoing"
+  const isLast = index === entries.length - 1;
+  const isOngoing = anime.status === "ongoing" && isLast;
+
+  // Only the last row gets the class if status is ongoing
+  tr.innerHTML = `
+    <td ${isOngoing ? 'class="ongoing"' : ''}>${season}</td>
+    <td ${isOngoing ? 'class="ongoing"' : ''}>${ep}</td>
+  `;
+
+  innerTable.appendChild(tr);
+});
+
+    seCell.appendChild(innerTable);
+    row.appendChild(seCell);
+
+    // Actions
+    const actionCell = document.createElement("td");
+
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "copy-btn";
+    copyBtn.textContent = "Copy Name";
+
+    let timer;
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(anime.name);
+      clearTimeout(timer);
+      copyBtn.textContent = "Copied!";
+      timer = setTimeout(() => copyBtn.textContent = "Copy Name", 1500);
+    };
+
+    const searchBtn = document.createElement("button");
+    searchBtn.className = "search-btn";
+    searchBtn.textContent = "Google";
+    searchBtn.onclick = () =>
+      window.open(`https://www.google.com/search?q=${encodeURIComponent(anime.name)}`, "_blank");
+
+    actionCell.append(copyBtn, searchBtn);
+    row.appendChild(actionCell);
+
+    tableBody.appendChild(row);
+  });
+document.getElementById("rowNumber").max = data.length;
+}
+
+// Initial render
+renderTable(animeData);
+
+// Search only by name
+const searchInput = document.getElementById("searchInput");
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value.trim();
+
+  // clear number input
+  document.getElementById("rowNumber").value = "";
+
+  // reset scroll when searching
+  document.querySelector(".table-wrapper").scrollTop = 0;
+
+  if (!query) {
+    renderTable(animeData);
+  } else {
+    const filtered = animeData.filter(a =>
+      a.name.toLowerCase().includes(query.toLowerCase())
+    );
+    renderTable(filtered, query);
+  }
+});
+
+//go btn
+document.getElementById("goBtn").addEventListener("click", () => {
+searchInput.value = "";
+renderTable(animeData);
+  const num = parseInt(document.getElementById("rowNumber").value, 10);
+  const wrapper = document.querySelector(".table-wrapper");
+  const rows = document.querySelectorAll("#animeBody > tr");
+
+  if (!num || num < 1 || num > rows.length) {
+   const goBtn = document.getElementById("goBtn");
+goBtn.textContent = "Invalid!";
+goBtn.style.background = "#dc3545";
+
+setTimeout(() => {
+  goBtn.textContent = "Go";
+  goBtn.style.background = "#007bff";
+}, 1500);
+    return;
+  }
+
+  const target = rows[num - 1];
+
+  const scrollTop =
+    target.getBoundingClientRect().top -
+    wrapper.getBoundingClientRect().top +
+    wrapper.scrollTop -
+    40;
+
+  wrapper.scrollTo({
+    top: scrollTop,
+    behavior: "smooth"
+  });
+
+  target.style.backgroundColor = "#ffeeba";
+  setTimeout(() => target.style.backgroundColor = "", 1500);
+ // reset search input and table before go
+});
+
+</script>
+
+</body>
+</html>
