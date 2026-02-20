@@ -1292,7 +1292,7 @@
         "seasons": {
             "1": 24,
             "2": 23,
-            "3": 4
+            "3": 5
         },
         "movies": "Jujutsu Kaisen 0",
         "status": "ongoing"
@@ -1366,7 +1366,7 @@
             "4": 25,
             "5": 25,
             "6": 25,
-            "7": 23
+            "7": 24
         },
         "movies": "Fairy Tail: 100 Years Quest",
         "status": "ongoing"
@@ -1450,14 +1450,14 @@
     {
         "name": "ROLL OVER AND DIE: I Will Fight for an Ordinary Life with My Love and Cursed Sword!",
         "seasons": {
-            "1": 3
+            "1": 4
         },
         "status": "ongoing"
     },
     {
         "name": "Sentenced to Be a Hero",
         "seasons": {
-            "1": 6
+            "1": 7
         },
         "status": "ongoing"
     },
@@ -1496,5 +1496,11 @@
             "1": 4
         },
         "status": "ongoing"
+    },
+    {
+        "name": "Terror in Resonance",
+        "seasons": {
+            "1": 11
+        }
     }
 ]
