@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latest Updates</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background: #f4f7f9;
+padding: 20px;
+}
+
+.container {
+max-width: 600px;
+margin: 0 auto;
+}
+
+.header {
+display: flex;
+align-items: center;
+gap: 15px;
+margin-bottom: 20px;
+}
+
+.back-btn {
+text-decoration: none;
+color: #007bff;
+font-weight: bold;
+}
+
+#noti-list {
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+
+.noti-card {
+background: #fff;
+border-radius: 12px;
+padding: 15px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+border-left: 6px solid #ccc;
+display: flex;
+gap: 15px;
+align-items: center;
+position: relative;
+animation: fadeIn 0.5s ease;
+}
+
+.noti-card.completed {
+border-left-color: #00c853;
+}
+
+.noti-card.new {
+border-left-color: #ff3d00;
+}
+
+.noti-card.update {
+border-left-color: #007bff;
+}
+
+.new-badge {
+position: absolute;
+top: 10px;
+right: 15px;
+background: #ff3d00;
+color: white;
+font-size: 10px;
+padding: 2px 8px;
+border-radius: 20px;
+font-weight: bold;
+}
+
+.icon {
+font-size: 24px;
+}
+
+.title {
+font-weight: bold;
+color: #333;
+}
+
+.desc {
+font-size: 14px;
+color: #666;
+margin: 5px 0;
+}
+
+.date {
+font-size: 11px;
+color: #999;
+}
+
+@keyframes fadeIn {
+from {
+opacity: 0;
+transform: translateY(5px);
+}
+
+to {
+opacity: 1;
+}
+}
+
+.date-divider {
+font-size: 12px;
+font-weight: bold;
+color: #888;
+text-transform: uppercase;
+margin: 20px 0 10px 5px;
+letter-spacing: 1px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="header">
+<a href="https://collectors-info.github.io/anime-list/" class="back-btn">← Back</a>
+<h2>Latest Updates</h2>
+</div>
+<div id="noti-list">Loading updates...</div>
+</div>
+
+<script>
+const lastSeenPage = localStorage.getItem("lastSeenNotifications") || "1/1/2000, 12:00:00 AM";
+const lastSeenTimestamp = new Date(lastSeenPage).getTime();
+
+
+function getDayString(dateObj) {
+return dateObj.getFullYear() + '-' + dateObj.getMonth() + '-' + dateObj.getDate();
+}
+
+function getDateLabel(dateString) {
+const itemDate = new Date(dateString);
+const today = new Date();
+const yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+
+const itemDay = getDayString(itemDate);
+const todayDay = getDayString(today);
+const yesterdayDay = getDayString(yesterday);
+
+if (itemDay === todayDay) return "Today";
+if (itemDay === yesterdayDay) return "Yesterday";
+return "Older Updates";
+}
+
+fetch("anime-news.json?v=" + Date.now())
+.then(response => response.json())
+.then(data => {
+const list = document.getElementById("noti-list");
+list.innerHTML = "";
+
+if (!data.news || data.news.length === 0) {
+list.innerHTML = "<p>No recent updates found.</p>";
+return;
+}
+
+data.news.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+let currentLabel = "";
+
+data.news.forEach(item => {
+const itemDateObj = new Date(item.date);
+const itemTimestamp = itemDateObj.getTime();
+const isNew = itemTimestamp > lastSeenTimestamp;
+
+const labelForThisItem = getDateLabel(item.date);
+
+if (labelForThisItem !== currentLabel) {
+const divider = document.createElement("div");
+divider.className = "date-divider";
+divider.innerText = labelForThisItem;
+list.appendChild(divider);
+currentLabel = labelForThisItem;
+}
+
+const card = document.createElement("div");
+card.className = `noti-card ${item.type}`;
+card.innerHTML = `
+${isNew ? '<span class="new-badge">New</span>' : ''}
+<div class="icon">${item.icon}</div>
+<div class="content">
+<div class="title">${item.title}</div>
+<div class="desc">${item.desc}</div>
+<div class="date">${item.date}</div>
+</div>
+`;
+list.appendChild(card);
+});
+
+const now = new Date().toLocaleString();
+localStorage.setItem("lastSeenNotifications", now);
+
+}).catch(err => {
+document.getElementById("noti-list").innerHTML = "Failed to load updates.";
+console.error("Error loading JSON:", err);
+});
+</script>
+
+</body>
+
+</html>
