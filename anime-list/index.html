@@ -601,7 +601,6 @@
     </div>
   </footer>
 <script>
-  // 1. GLOBAL SETTINGS & DATA
 const tableBody = document.getElementById("animeBody");
 const tableWrapper = document.querySelector(".table-wrapper");
 const searchInput = document.getElementById("searchInput");
@@ -612,16 +611,14 @@ const notiBtn = document.getElementById("notiBtn");
 const lastUpdatedText = document.getElementById("lastUpdated");
 const totalCountText = document.getElementById("totalCount");
 
-let animeData = [];      // Stores full original list
-let filteredData = [];   // Stores current view (search results)
+let animeData = [];
+let filteredData = [];
 let currentPage = 1;
 const rowsPerPage = 20;
 
-// 2. THE CORE RENDER FUNCTION
 function renderTable(data, highlight = "") {
     tableBody.innerHTML = "";
     
-    // Calculate start and end for pagination
     const startIndex = (currentPage - 1) * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
     const paginatedItems = data.slice(startIndex, endIndex);
@@ -636,7 +633,6 @@ function renderTable(data, highlight = "") {
         const row = document.createElement("tr");
         const actualIndex = startIndex + index + 1;
 
-        // Clean name for the Copy button to prevent JS errors with quotes
         const safeName = anime.name.replace(/'/g, "\\'");
 
         row.innerHTML = `
@@ -663,12 +659,9 @@ function renderTable(data, highlight = "") {
     updatePaginationControls(data.length);
 }
 
-// 3. PAGINATION CONTROLS
-// 1. Update this function to show the total pages count
 function updatePaginationControls(totalItems) {
     const totalPages = Math.ceil(totalItems / rowsPerPage) || 1;
     
-    // Update the "of X" text
     document.getElementById("totalPagesText").textContent = `of ${totalPages}`;
     document.getElementById("jumpPageInput").max = totalPages;
     document.getElementById("jumpPageInput").value = currentPage;
@@ -677,7 +670,6 @@ function updatePaginationControls(totalItems) {
     document.getElementById("nextPage").disabled = (currentPage === totalPages);
 }
 
-// 2. Add the Event Listener for the "Go" (Jump) button
 document.getElementById("jumpPageBtn").addEventListener("click", () => {
   const jumpBtn = document.getElementById("jumpPageBtn");
     const jumpInput = document.getElementById("jumpPageInput");
@@ -689,7 +681,6 @@ document.getElementById("jumpPageBtn").addEventListener("click", () => {
         renderTable(filteredData, searchInput.value.trim());
         tableWrapper.scrollTop = 0; // Scroll table back to top
     } else {
-   // Replace: alert("Invalid Page Number"); with this:
     jumpBtn.textContent = "Invalid!";
     jumpBtn.style.cssText = "background:#dc3545;color:white;border-color:black;"; 
     setTimeout(() => {
@@ -718,7 +709,6 @@ document.getElementById("nextPage").addEventListener("click", () => {
     }
 });
 
-// 4. SEARCH & GO TO ROW LOGIC
 searchInput.addEventListener("input", () => {
     const query = searchInput.value.toLowerCase().trim();
     rowInput.value = "";
@@ -732,35 +722,27 @@ searchInput.addEventListener("input", () => {
 goBtn.addEventListener("click", () => {
     const num = parseInt(rowInput.value, 10);
     
-    // 1. Validate the input against the TOTAL data length, not just the page
     if (!num || num < 1 || num > animeData.length) {
         goBtn.textContent = "Error!";
         setTimeout(() => goBtn.textContent = "Go", 1000);
         return;
     }
 
-    // 2. Reset search so we are looking at the full list
     searchInput.value = ""; 
     filteredData = animeData; 
 
-    // 3. Calculate which page the row is on and render it
     currentPage = Math.ceil(num / rowsPerPage);
     renderTable(animeData);
 
-    // 4. Scroll to the row
     setTimeout(() => {
-        // IMPORTANT: We only select direct children rows of animeBody
-        // This prevents counting the inner season/episode rows
         const rows = tableBody.querySelectorAll(":scope > tr"); 
         
-        // Calculate position relative to the current page
         const relativeIndex = (num - 1) % rowsPerPage;
         const target = rows[relativeIndex];
 
         if (target) {
             target.scrollIntoView({ behavior: "smooth", block: "center" });
             
-            // Highlight effect
             target.style.transition = "background-color 0.3s";
             target.style.backgroundColor = "#ffeeba";
             setTimeout(() => target.style.backgroundColor = "", 2000);
@@ -768,11 +750,9 @@ goBtn.addEventListener("click", () => {
     }, 150);
 });
 
-// 5. INITIAL DATA FETCH
 fetch("anime-data.json")
     .then(res => {
         if (!res.ok) throw new Error("JSON load failed");
-        // Update "Last Updated" text
         const lastMod = res.headers.get("Last-Modified");
         lastUpdatedText.textContent = lastMod ? new Date(lastMod).toLocaleString() : new Date().toLocaleString();
         return res.json();
@@ -788,10 +768,9 @@ fetch("anime-data.json")
         lastUpdatedText.textContent = "Offline";
     });
 
-// 6. NOTIFICATION SYSTEM
 const lastReadTimestamp = localStorage.getItem("lastReadTime") ? new Date(localStorage.getItem("lastReadTime")).getTime() : 0;
 
-fetch("anime-news.json?v=" + Date.now())
+fetch("/anime-news/anime-news.json?v=" + Date.now())
     .then(res => res.json())
     .then(data => {
         const newItems = data.news.filter(item => new Date(item.date).getTime() > lastReadTimestamp);
@@ -807,7 +786,6 @@ notiBtn.addEventListener("click", () => {
     notiCountElement.style.display = "none";
 });
 
-// 7. UI TOGGLES & HELPERS
 window.copyName = (name, btn) => {
     navigator.clipboard.writeText(name);
     btn.textContent = "Copied!";
@@ -821,21 +799,15 @@ const searchIcon = document.getElementById("searchIcon");
 toggleSearch.addEventListener("click", () => {
     const isOpen = searchPanel.classList.toggle("open");
     
-    // 1. Correctly toggle the icon
-    searchIcon.textContent = isOpen ? "✖️" : "🔍";
-    
-    // 2. Change the button color
+    searchIcon.textContent = isOpen ? "✖️" : "🔍";    
     toggleSearch.style.background = isOpen ? "#6c757d" : "#007bff";
 
     if (isOpen) {
-        // Focus the input when opening
         setTimeout(() => searchInput.focus(), 300);
     } else {
-        // THE FIX: Clear inputs only when CLOSING the panel
         rowInput.value = "";
         searchInput.value = "";
         
-        // Reset the table to show everything again
         currentPage = 1;
         filteredData = animeData;
         renderTable(animeData);
