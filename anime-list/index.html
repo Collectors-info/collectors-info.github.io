@@ -14,15 +14,11 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://collectors-info.github.io/anime-list/">
   <meta property="og:title" content="Collectors Anime-List">
-  <meta name="description"
-    content="Collectors Anime-List: A complete, searchable directory of Hindi dubbed anime. Track seasons, episode counts, and airing status in your native language.">
   <meta property="og:image" content="https://collectors-info.github.io/anime-list/logo.png">
 
   <meta property="twitter:card" content="summary_large_image">
   <meta property="twitter:url" content="https://collectors-info.github.io/anime-list/">
   <meta property="twitter:title" content="Collectors Anime-List">
-  <meta name="description"
-    content="Collectors Anime-List: A complete, searchable directory of Hindi dubbed anime. Track seasons, episode counts, and airing status in your native language.">
   <meta property="twitter:image" content="https://collectors-info.github.io/anime-list/logo.png">
   <style>
     * {
@@ -42,7 +38,7 @@
       border-collapse: collapse;
       background: #fff;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      font-size: medium;
+      font-size: small;
     }
 
     table thead th {
@@ -154,11 +150,11 @@
     }
 
     .table-wrapper {
-      max-height: 69vh;
+      max-height: 65vh;
       overflow: auto;
       border-radius: 8px;
       border: 1px solid #ccc;
-      margin-bottom: 100px;
+      margin-bottom: 15px;
     }
 
     #goBtn {
@@ -311,25 +307,27 @@
       transform: scale(1.05);
     }
 
-    #main-container {
-      display: flex;
-    }
-
     .main-header {
       background: #1a2a3a;
-      padding: 10px 15px;
+      padding: 10px 10px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       position: sticky;
       top: 0;
-      z-index: 1000;
+      z-index: 10;
     }
 
     .header-container {
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+    }
+
+    .inner-container{
+      position: absolute;
+      display: flex;
+      gap: 7px;
+      right: 15px;
     }
 
     .logo-link {
@@ -406,24 +404,131 @@
         max-width: 30px;
       }
     }
+
+
+    footer {
+      background: #1a2a3a;
+      color: #ffffff;
+      padding: 35px 15px;
+      text-align: center;
+      margin-top: 40px;
+      border-top: 4px solid #007bff;
+    }
+
+    .contact-text {
+      font-size: 16px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #e0e0e0;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .link-tg {
+      background: #24A1DE;
+      color: white;
+    }
+
+    .link-ig {
+      background: #E1306C;
+      color: white;
+    }
+
+    .footer-links a:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.1);
+    }
+
+.social-icon {
+      width: 20px;
+      height: 20px;
+      object-fit: contain;
+      filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.3)); 
+      transition: filter 0.3s ease;
+    }
+
+    .footer-links a:hover .social-icon {
+      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.5));
+    }
+
+    .copyright {
+      margin-top: 25px;
+      font-size: 12px;
+      color: #7f8c8d;
+    }
+
+.pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .page-btn {
+      background: #fff;
+      color: #007bff;
+      border: 1px solid #007bff;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .page-btn.active {
+      background: #007bff;
+      color: #fff;
+    }
+
+    .page-btn:disabled {
+      background: #e9ecef;
+      border-color: #dee2e6;
+      color: #6c757d;
+      cursor: not-allowed;
+    }
+
+    .page-info {
+      font-size: 14px;
+      font-weight: bold;
+      color: #333;
+    }
   </style>
 </head>
 
 <body>
-
   <header class="main-header">
     <div class="header-container">
       <a href="https://collectors-info.github.io/anime-list/" class="logo-link">
         <img src="hlogo.png" alt="Collectors Anime-List" class="site-logo">
         <span class="header-text">Collectors Anime-List</span>
       </a>
-
-      <a href="https://collectors-info.github.io/anime-news" class="notification-btn" id="notiBtn">
-        <span class="bell-icon">🔔</span>
-        <span id="notiCount" class="notification-count" style="display: none;">0</span>
-      </a>
-    </div>
-  </header>
+ <div class="inner-container"><button id="toggleSearch" style="float: right; background: #007bff; color: white;border-radius: 50px; display: inline-flex; align-items: center;">
+      <span id="searchIcon">🔍</span></button>
+  <a href="https://collectors-info.github.io/anime-news" class="notification-btn" id="notiBtn">
+      <span class="bell-icon">🔔</span>
+      <span id="notiCount" class="notification-count" style="display: none;">0</span>
+  </a></div>
+  </div>
+</header>
 
   <div class="info-bar">
     <div class="legend">
@@ -437,15 +542,6 @@
       <span> | </span>
       <span><strong>Updated:</strong> <span id="lastUpdated">...</span></span>
     </div>
-  </div>
-
-  <div id="main-container" style="text-align: center; margin: 10px 0;">
-    <a href="https://whatsapp.com/channel/0029Vb7PDWxCHDymGBAEKn0B" class="whatsapp-btn">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="24" height="24" alt="WhatsApp">
-      &nbsp;Join WhatsApp Channel</a>
-    <button id="toggleSearch"
-      style="background: #007bff; color: white;border-radius: 50px; display: inline-flex; align-items: center;">
-      <span id="searchIcon">🔍</span></button>
   </div>
 
   <div id="searchPanel">
@@ -471,258 +567,282 @@
       <tbody id="animeBody"></tbody>
     </table>
   </div>
-  <script>
-    const tableBody = document.getElementById("animeBody");
-    let animeData = [];
+<div class="pagination-container">
+    <button class="page-btn" id="prevPage"><<</button>
+    
+    <div style="display: flex; align-items: center; gap: 5px; margin: 0 5px;">
+        <span>Page</span>
+        <input type="number" id="jumpPageInput" min="1" style="width: 50px; padding: 5px; text-align: center;">
+        <span id="totalPagesText">of 1</span>
+        <button id="jumpPageBtn" class="page-btn" style="padding: 5px 10px;">Go</button>
+    </div>
 
-    const toggleSearch = document.getElementById("toggleSearch");
-    const searchPanel = document.getElementById("searchPanel");
-    const searchIcon = document.getElementById("searchIcon");
+    <button class="page-btn" id="nextPage">>></button>
+</div>
+<footer>
+    <div class="footer-content">
+      <p class="contact-text">Connect with Me</p>
+      <div class="footer-links">
+        
+        <a href="https://t.me/E_Bot_Raja" target="_blank" class="link-tg">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram" class="social-icon">
+          Telegram
+        </a>
 
-    toggleSearch.addEventListener("click", () => {
-      searchPanel.classList.toggle("open");
+        <a href="https://www.instagram.com/e_bot_raja" target="_blank" class="link-ig">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" alt="Instagram" class="social-icon">
+          Instagram
+        </a>
+    <a href="https://whatsapp.com/channel/0029Vb7PDWxCHDymGBAEKn0B" class="whatsapp-btn">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="24" height="24" alt="WhatsApp">
+      &nbsp;Join WhatsApp Channel</a>
+      </div>
+      <p class="copyright">© 2026 Collectors Anime-List</p>
+    </div>
+  </footer>
+<script>
+  // 1. GLOBAL SETTINGS & DATA
+const tableBody = document.getElementById("animeBody");
+const tableWrapper = document.querySelector(".table-wrapper");
+const searchInput = document.getElementById("searchInput");
+const rowInput = document.getElementById("rowNumber");
+const goBtn = document.getElementById("goBtn");
+const notiCountElement = document.getElementById("notiCount");
+const notiBtn = document.getElementById("notiBtn");
+const lastUpdatedText = document.getElementById("lastUpdated");
+const totalCountText = document.getElementById("totalCount");
 
-      if (searchPanel.classList.contains("open")) {
-        searchIcon.textContent = "✖️";
-        toggleSearch.style.background = "#6c757d";
+let animeData = [];      // Stores full original list
+let filteredData = [];   // Stores current view (search results)
+let currentPage = 1;
+const rowsPerPage = 20;
 
-        setTimeout(() => document.getElementById("searchInput").focus(), 300);
-      } else {
-        searchIcon.textContent = "🔍";
-        toggleSearch.style.background = "#007bff";
-        document.getElementById("rowNumber").value = "";
-        searchInput.value = "";
-      }
-    });
+// 2. THE CORE RENDER FUNCTION
+function renderTable(data, highlight = "") {
+    tableBody.innerHTML = "";
+    
+    // Calculate start and end for pagination
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const paginatedItems = data.slice(startIndex, endIndex);
 
-    const notiCountElement = document.getElementById("notiCount");
-    const notiBtn = document.getElementById("notiBtn");
-
-    const lastReadText = localStorage.getItem("lastReadTime");
-    const lastReadTimestamp = lastReadText ? new Date(lastReadText).getTime() : 0;
-
-    fetch("/anime-news/anime-news.json?v=" + Date.now())
-      .then(response => response.json())
-      .then(data => {
-
-        const newItems = data.news.filter(item => {
-          const itemTimestamp = new Date(item.date).getTime();
-
-          return !isNaN(itemTimestamp) && itemTimestamp > lastReadTimestamp;
-        });
-
-        if (newItems.length > 0) {
-          notiCountElement.textContent = newItems.length;
-          notiCountElement.style.display = "block";
-        } else {
-          notiCountElement.style.display = "none";
-        }
-      })
-      .catch(err => console.error("News fetch failed:", err));
-
-    notiBtn.addEventListener("click", () => {
-      const now = new Date();
-      localStorage.setItem("lastReadTime", now.toLocaleString());
-      notiCountElement.style.display = "none";
-    });
-
-    fetch("anime-data.json")
-      .then(response => {
-        if (!response.ok) throw new Error("JSON load failed");
-
-
-        const lastMod = response.headers.get("Last-Modified");
-        const dateDisplay = document.getElementById("lastUpdated");
-
-        if (lastMod) {
-          const date = new Date(lastMod);
-
-          dateDisplay.textContent = date.toLocaleString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
-          });
-        } else {
-
-          dateDisplay.textContent = new Date().toLocaleString('en-US', {
-            month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true
-          });
-        }
-
-        return response.json();
-      })
-      .then(data => {
-        animeData = data;
-
-
-        const countDisplay = document.getElementById("totalCount");
-        if (countDisplay) {
-          countDisplay.textContent = data.length;
-        }
-
-        renderTable(animeData);
-      })
-      .catch(error => {
-        console.error("Error loading anime JSON:", error);
-        const dateDisplay = document.getElementById("lastUpdated");
-        if (dateDisplay) dateDisplay.textContent = "Error loading date";
-      });
-
-    function renderTable(data, highlight = "") {
-      tableBody.innerHTML = "";
-
-      if (data.length === 0) {
-        const emptyRow = document.createElement("tr");
-        emptyRow.innerHTML = `
-<td colspan="4" style="text-align: center; padding: 40px; color: #666;">
-<div style="font-size: 24px; margin-bottom: 10px;">🔍</div>
-No anime found matching your search.
-</td>
-`;
-        tableBody.appendChild(emptyRow);
+    if (data.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 40px; color: #666;">No anime found matching your search.</td></tr>`;
+        updatePaginationControls(0);
         return;
-      }
-
-      data.forEach((anime, index) => {
-
-      });
-
-      data.forEach((anime, index) => {
-        const row = document.createElement("tr");
-
-        const noCell = document.createElement("td");
-        noCell.textContent = index + 1;
-        row.appendChild(noCell);
-
-        const nameCell = document.createElement("td");
-        if (highlight) {
-          const regex = new RegExp(`(${highlight})`, "gi");
-          nameCell.innerHTML = anime.name.replace(regex, `<span class="highlight">$1</span>`);
-        } else {
-          nameCell.textContent = anime.name;
-        }
-        row.appendChild(nameCell);
-
-        const seCell = document.createElement("td");
-        const innerTable = document.createElement("table");
-        innerTable.className = "inner-table";
-
-        const headerRow = document.createElement("tr");
-        headerRow.innerHTML = "<th>S</th><th>E</th>";
-        innerTable.appendChild(headerRow);
-
-        const entries = Object.entries(anime.seasons);
-
-        entries.forEach(([season, ep], index) => {
-          const tr = document.createElement("tr");
-
-          const isLast = index === entries.length - 1;
-          const isOngoing = anime.status === "ongoing" && isLast;
-
-          tr.innerHTML = `
-<td ${isOngoing ? 'class="ongoing"' : ''}>${season}</td>
-<td ${isOngoing ? 'class="ongoing"' : ''}>${ep}</td>
-`;
-
-          innerTable.appendChild(tr);
-        });
-
-        seCell.appendChild(innerTable);
-        row.appendChild(seCell);
-
-        const actionCell = document.createElement("td");
-
-        const copyBtn = document.createElement("button");
-        copyBtn.className = "copy-btn";
-        copyBtn.textContent = "Copy Name";
-
-        let timer;
-        copyBtn.onclick = () => {
-          navigator.clipboard.writeText(anime.name);
-          clearTimeout(timer);
-          copyBtn.textContent = "Copied!";
-          timer = setTimeout(() => copyBtn.textContent = "Copy Name", 1500);
-        };
-
-        const searchBtn = document.createElement("button");
-        searchBtn.className = "search-btn";
-        searchBtn.textContent = "Google";
-        searchBtn.onclick = () =>
-          window.open(`https://www.google.com/search?q=${encodeURIComponent(anime.name)}`, "_blank");
-
-        actionCell.append(copyBtn, searchBtn);
-        row.appendChild(actionCell);
-
-        tableBody.appendChild(row);
-      });
-      document.getElementById("rowNumber").max = data.length;
     }
 
+    paginatedItems.forEach((anime, index) => {
+        const row = document.createElement("tr");
+        const actualIndex = startIndex + index + 1;
+
+        // Clean name for the Copy button to prevent JS errors with quotes
+        const safeName = anime.name.replace(/'/g, "\\'");
+
+        row.innerHTML = `
+            <td>${actualIndex}</td>
+            <td>${highlight ? anime.name.replace(new RegExp(`(${highlight})`, "gi"), '<span class="highlight">$1</span>') : anime.name}</td>
+            <td>
+                <table class="inner-table">
+                    <tr><th>S</th><th>E</th></tr>
+                    ${Object.entries(anime.seasons).map(([s, e], i, arr) => {
+                        const isLast = i === arr.length - 1;
+                        const isOngoing = anime.status === "ongoing" && isLast;
+                        return `<tr><td class="${isOngoing ? 'ongoing' : ''}">${s}</td><td class="${isOngoing ? 'ongoing' : ''}">${e}</td></tr>`;
+                    }).join('')}
+                </table>
+            </td>
+            <td>
+                <button class="copy-btn" onclick="copyName('${safeName}', this)">Copy Name</button>
+                <button class="search-btn" onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(anime.name)}', '_blank')">Google</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+
+    updatePaginationControls(data.length);
+}
+
+// 3. PAGINATION CONTROLS
+// 1. Update this function to show the total pages count
+function updatePaginationControls(totalItems) {
+    const totalPages = Math.ceil(totalItems / rowsPerPage) || 1;
+    
+    // Update the "of X" text
+    document.getElementById("totalPagesText").textContent = `of ${totalPages}`;
+    document.getElementById("jumpPageInput").max = totalPages;
+    document.getElementById("jumpPageInput").value = currentPage;
+
+    document.getElementById("prevPage").disabled = (currentPage === 1);
+    document.getElementById("nextPage").disabled = (currentPage === totalPages);
+}
+
+// 2. Add the Event Listener for the "Go" (Jump) button
+document.getElementById("jumpPageBtn").addEventListener("click", () => {
+  const jumpBtn = document.getElementById("jumpPageBtn");
+    const jumpInput = document.getElementById("jumpPageInput");
+    const targetPage = parseInt(jumpInput.value, 10);
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage) || 1;
+
+    if (targetPage >= 1 && targetPage <= totalPages) {
+        currentPage = targetPage;
+        renderTable(filteredData, searchInput.value.trim());
+        tableWrapper.scrollTop = 0; // Scroll table back to top
+    } else {
+   // Replace: alert("Invalid Page Number"); with this:
+    jumpBtn.textContent = "Invalid!";
+    jumpBtn.style.cssText = "background:#dc3545;color:white;border-color:black;"; 
+    setTimeout(() => {
+        jumpBtn.textContent = "Go";
+       jumpBtn.style.cssText = "";
+        jumpInput.value = currentPage;
+    }, 1500);
+        jumpInput.value = currentPage;
+    }
+});
+
+document.getElementById("prevPage").addEventListener("click", () => {
+    if (currentPage > 1) {
+        currentPage--;
+        renderTable(filteredData, searchInput.value.trim());
+        tableWrapper.scrollTop = 0;
+    }
+});
+
+document.getElementById("nextPage").addEventListener("click", () => {
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+    if (currentPage < totalPages) {
+        currentPage++;
+        renderTable(filteredData, searchInput.value.trim());
+        tableWrapper.scrollTop = 0;
+    }
+});
+
+// 4. SEARCH & GO TO ROW LOGIC
+searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase().trim();
+    rowInput.value = "";
+    currentPage = 1;
+    tableWrapper.scrollTop = 0; 
+    
+    filteredData = animeData.filter(a => a.name.toLowerCase().includes(query));
+    renderTable(filteredData, query);
+});
+
+goBtn.addEventListener("click", () => {
+    const num = parseInt(rowInput.value, 10);
+    
+    // 1. Validate the input against the TOTAL data length, not just the page
+    if (!num || num < 1 || num > animeData.length) {
+        goBtn.textContent = "Error!";
+        setTimeout(() => goBtn.textContent = "Go", 1000);
+        return;
+    }
+
+    // 2. Reset search so we are looking at the full list
+    searchInput.value = ""; 
+    filteredData = animeData; 
+
+    // 3. Calculate which page the row is on and render it
+    currentPage = Math.ceil(num / rowsPerPage);
     renderTable(animeData);
 
-    const searchInput = document.getElementById("searchInput");
-    searchInput.addEventListener("input", () => {
-      const query = searchInput.value.trim();
+    // 4. Scroll to the row
+    setTimeout(() => {
+        // IMPORTANT: We only select direct children rows of animeBody
+        // This prevents counting the inner season/episode rows
+        const rows = tableBody.querySelectorAll(":scope > tr"); 
+        
+        // Calculate position relative to the current page
+        const relativeIndex = (num - 1) % rowsPerPage;
+        const target = rows[relativeIndex];
 
+        if (target) {
+            target.scrollIntoView({ behavior: "smooth", block: "center" });
+            
+            // Highlight effect
+            target.style.transition = "background-color 0.3s";
+            target.style.backgroundColor = "#ffeeba";
+            setTimeout(() => target.style.backgroundColor = "", 2000);
+        }
+    }, 150);
+});
 
-      document.getElementById("rowNumber").value = "";
-
-
-      document.querySelector(".table-wrapper").scrollTop = 0;
-
-      if (!query) {
+// 5. INITIAL DATA FETCH
+fetch("anime-data.json")
+    .then(res => {
+        if (!res.ok) throw new Error("JSON load failed");
+        // Update "Last Updated" text
+        const lastMod = res.headers.get("Last-Modified");
+        lastUpdatedText.textContent = lastMod ? new Date(lastMod).toLocaleString() : new Date().toLocaleString();
+        return res.json();
+    })
+    .then(data => {
+        animeData = data;
+        filteredData = data;
+        if (totalCountText) totalCountText.textContent = data.length;
         renderTable(animeData);
-      } else {
-        const filtered = animeData.filter(a =>
-          a.name.toLowerCase().includes(query.toLowerCase())
-        );
-        renderTable(filtered, query);
-      }
+    })
+    .catch(err => {
+        console.error("Data fetch error:", err);
+        lastUpdatedText.textContent = "Offline";
     });
 
+// 6. NOTIFICATION SYSTEM
+const lastReadTimestamp = localStorage.getItem("lastReadTime") ? new Date(localStorage.getItem("lastReadTime")).getTime() : 0;
 
-    document.getElementById("goBtn").addEventListener("click", () => {
-      searchInput.value = "";
-      renderTable(animeData);
-      const num = parseInt(document.getElementById("rowNumber").value, 10);
-      const wrapper = document.querySelector(".table-wrapper");
-      const rows = document.querySelectorAll("#animeBody > tr");
+fetch("anime-news.json?v=" + Date.now())
+    .then(res => res.json())
+    .then(data => {
+        const newItems = data.news.filter(item => new Date(item.date).getTime() > lastReadTimestamp);
+        if (newItems.length > 0) {
+            notiCountElement.textContent = newItems.length;
+            notiCountElement.style.display = "block";
+        }
+    })
+    .catch(() => console.warn("News feed not found. Check anime-news.json location."));
 
-      if (!num || num < 1 || num > rows.length) {
-        const goBtn = document.getElementById("goBtn");
-        goBtn.textContent = "Invalid!";
-        goBtn.style.background = "#dc3545";
+notiBtn.addEventListener("click", () => {
+    localStorage.setItem("lastReadTime", new Date().toLocaleString());
+    notiCountElement.style.display = "none";
+});
 
-        setTimeout(() => {
-          goBtn.textContent = "Go";
-          goBtn.style.background = "#007bff";
-        }, 1500);
-        return;
-      }
+// 7. UI TOGGLES & HELPERS
+window.copyName = (name, btn) => {
+    navigator.clipboard.writeText(name);
+    btn.textContent = "Copied!";
+    setTimeout(() => btn.textContent = "Copy Name", 1500);
+};
 
-      const target = rows[num - 1];
+const toggleSearch = document.getElementById("toggleSearch");
+const searchPanel = document.getElementById("searchPanel");
+const searchIcon = document.getElementById("searchIcon");
 
-      const scrollTop =
-        target.getBoundingClientRect().top -
-        wrapper.getBoundingClientRect().top +
-        wrapper.scrollTop -
-        40;
+toggleSearch.addEventListener("click", () => {
+    const isOpen = searchPanel.classList.toggle("open");
+    
+    // 1. Correctly toggle the icon
+    searchIcon.textContent = isOpen ? "✖️" : "🔍";
+    
+    // 2. Change the button color
+    toggleSearch.style.background = isOpen ? "#6c757d" : "#007bff";
 
-      wrapper.scrollTo({
-        top: scrollTop,
-        behavior: "smooth"
-      });
-
-      target.style.backgroundColor = "#ffeeba";
-      setTimeout(() => target.style.backgroundColor = "", 1500);
-
-    });
-
-  </script>
-
+    if (isOpen) {
+        // Focus the input when opening
+        setTimeout(() => searchInput.focus(), 300);
+    } else {
+        // THE FIX: Clear inputs only when CLOSING the panel
+        rowInput.value = "";
+        searchInput.value = "";
+        
+        // Reset the table to show everything again
+        currentPage = 1;
+        filteredData = animeData;
+        renderTable(animeData);
+        tableWrapper.scrollTop = 0;
+    }
+});
+</script>
 </body>
 
 </html>
