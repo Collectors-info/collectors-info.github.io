@@ -1365,7 +1365,7 @@
             "4": 25,
             "5": 25,
             "6": 25,
-            "7": 26
+            "7": 28
         },
         "movies": "Fairy Tail: 100 Years Quest",
         "status": "ongoing"
@@ -1401,21 +1401,21 @@
     {
         "name": "Hana-Kimi",
         "seasons": {
-            "1": 8
+            "1": 9
         },
         "status": "ongoing"
     },
     {
         "name": "Kunon the Sorcerer Can See",
         "seasons": {
-            "1": 4
+            "1": 5
         },
         "status": "ongoing"
     },
     {
         "name": "You and I Are Polar Opposites",
         "seasons": {
-            "1": 6
+            "1": 7
         },
         "status": "ongoing"
     },
