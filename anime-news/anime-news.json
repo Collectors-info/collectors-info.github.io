@@ -1,18 +1,25 @@
 {
   "news": [
     {
+      "type": "update",
+      "title": "New Episode Alert",
+      "desc": "Episode 12 of <strong>One-Punch Man</strong> arrives in <b>Hindi</b> this Sunday on <a href='https://www.crunchyroll.com/' class='watch' target='_blank'>Crunchyroll</a>",
+      "date": "2026-02-27 4:00 PM",
+      "icon": "🔄"
+    },
+    {
+      "type": "completed",
+      "title": "Season Completed",
+      "desc": "All episodes of <strong>BAKI-DOU: The Invincible Samurai</strong> Season 1 are now live in <b>Hindi</b> on <a href='https://www.netflix.com/in/title/81922765/' class='N' target='_blank'>Netflix</a>",
+      "date": "2026-02-27 4:01 PM",
+      "icon": "✅"
+    },
+    {
       "type": "completed",
       "title": "Season Completed",
       "desc": "All episodes of <strong>SPY x FAMILY</strong> Season 3 are now live in <b>Hindi</b> on <a href='https://www.crunchyroll.com/' class='watch' target='_blank'>Crunchyroll</a>",
       "date": "2026-02-23 08:45 AM",
       "icon": "✅"
-    },
-    {
-      "type": "update",
-      "title": "New Episode Alert",
-      "desc": "Episode 11 of <strong>One-Punch Man</strong> is now available in <b>Hindi</b> on <a href='https://www.crunchyroll.com/' class='watch' target='_blank'>Crunchyroll</a>",
-      "date": "2026-02-23 09:00 AM",
-      "icon": "🔄"
     }
 ]
 }
