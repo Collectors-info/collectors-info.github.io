@@ -1278,15 +1278,17 @@
         "name": "Tokyo Ghoul",
         "seasons": {
             "1": 12,
-            "2": 12
-        }
+            "2": 12,
+            "3": 3
+        },
+        "status": "ongoing"
     },
     {
         "name": "Jujutsu Kaisen",
         "seasons": {
             "1": 24,
             "2": 23,
-            "3": 5
+            "3": 6
         },
         "movies": "Jujutsu Kaisen 0",
         "status": "ongoing"
@@ -1359,7 +1361,7 @@
             "4": 25,
             "5": 25,
             "6": 25,
-            "7": 29
+            "7": 31
         },
         "movies": "Fairy Tail: 100 Years Quest",
         "status": "ongoing"
@@ -1443,21 +1445,21 @@
     {
         "name": "ROLL OVER AND DIE: I Will Fight for an Ordinary Life with My Love and Cursed Sword!",
         "seasons": {
-            "1": 4
+            "1": 5
         },
         "status": "ongoing"
     },
     {
         "name": "Sentenced to Be a Hero",
         "seasons": {
-            "1": 7
+            "1": 8
         },
         "status": "ongoing"
     },
     {
         "name": "An Adventurer’s Daily Grind at Age 29",
         "seasons": {
-            "1": 4
+            "1": 5
         },
         "status": "ongoing"
     },
@@ -1484,16 +1486,15 @@
         }
     },
     {
-        "name": "An Adventurer’s Daily Grind at Age 29",
-        "seasons": {
-            "1": 4
-        },
-        "status": "ongoing"
-    },
-    {
         "name": "Terror in Resonance",
         "seasons": {
             "1": 11
+        }
+    },
+    {
+        "name": "BAKI-DOU: The Invincible Samurai",
+        "seasons": {
+            "1": 13
         }
     }
 ]
