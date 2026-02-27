@@ -1240,8 +1240,8 @@ const searchIcon = document.getElementById("searchIcon");
 toggleSearch.addEventListener("click", () => {
     const isOpen = searchPanel.classList.toggle("open");
     
-    searchIcon.textContent = isOpen ? "✖️" : "🔍";    
-    toggleSearch.style.background = isOpen ? "#6c757d" : "#007bff";
+    searchIcon.innerHTML = isOpen ? `<i style="color: black;" class="fa fa-remove"></i>` : `<i class="fa fa-search"></i>`;    
+    toggleSearch.style.background = isOpen ? "#fff" : "#007bff";
 
     if (isOpen) {
         setTimeout(() => searchInput.focus(), 300);
