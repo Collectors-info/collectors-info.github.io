@@ -110,7 +110,7 @@
         "seasons": {
             "1": 24,
             "2": 24,
-            "3": 19
+            "3": 20
         },
         "status": "ongoing"
     },
@@ -335,7 +335,7 @@
         "name": "Frieren: Beyond Journey's End",
         "seasons": {
             "1": 28,
-            "2": 3
+            "2": 4
         },
         "status": "ongoing"
     },
@@ -1361,7 +1361,7 @@
             "4": 25,
             "5": 25,
             "6": 25,
-            "7": 31
+            "7": 32
         },
         "movies": "Fairy Tail: 100 Years Quest",
         "status": "ongoing"
@@ -1438,7 +1438,7 @@
     {
         "name": "Dark Moon: The Blood Altar",
         "seasons": {
-            "1": 7
+            "1": 8
         },
         "status": "ongoing"
     },
