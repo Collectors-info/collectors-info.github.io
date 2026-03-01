@@ -1,6 +1,13 @@
 {
   "news": [
     {
+      "type": "completed",
+      "title": "Season Completed",
+      "desc": "All episodes of <strong>Bofuri: I Don’t Want to Get Hurt, So I’ll Max Out My Defense</strong> Season 1 are now live in <b>Hindi</b> on <a href='https://youtube.com/playlist?list=PLpm1VVK4UL15ShgULlNCYDVlDCthHcEj5&si=UQ6HrRiC0GQg4ZL1' class='muse' target='_blank'>Muse India</a> - Youtube channel.",
+      "date": "2026-03-1 11:08 AM",
+      "icon": "✅"
+    },
+    {
       "type": "update",
       "title": "New Episode Alert",
       "desc": "Episode 12 of <strong>One-Punch Man</strong> arrives in <b>Hindi</b> this Sunday on <a href='https://www.crunchyroll.com/' class='watch' target='_blank'>Crunchyroll</a>",
