@@ -259,7 +259,7 @@
             "2": 12,
             "3": 12,
             "4": 12,
-            "5": 7
+            "5": 8
         },
         "status": "ongoing"
     },
@@ -778,9 +778,8 @@
         "seasons": {
             "1": 12,
             "2": 12,
-            "3": 11
-        },
-        "status": "ongoing"
+            "3": 12
+        }
     },
     {
         "name": "Mechanical Marie",
@@ -1360,7 +1359,7 @@
             "4": 25,
             "5": 25,
             "6": 25,
-            "7": 33
+            "7": 35
         },
         "movies": "Fairy Tail: 100 Years Quest",
         "status": "ongoing"
@@ -1396,14 +1395,14 @@
     {
         "name": "Hana-Kimi",
         "seasons": {
-            "1": 9
+            "1": 10
         },
         "status": "ongoing"
     },
     {
         "name": "Kunon the Sorcerer Can See",
         "seasons": {
-            "1": 5
+            "1": 6
         },
         "status": "ongoing"
     },
