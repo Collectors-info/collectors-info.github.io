@@ -679,6 +679,29 @@
     opacity: 0;
     transform: scale(0.9);
 }
+
+.anime-card-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    padding: 6px 0;
+}
+
+.anime-poster {
+    width: 80px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.anime-title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.2;
+}
   </style>
 </head>
 
@@ -822,7 +845,7 @@ function renderTable(data, highlight = "") {
     const paginatedItems = data.slice(startIndex, endIndex);
 
     if (data.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 40px; color: #666;">No anime found matching your search.</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align: center; padding: 40px; color: #666;">No anime found matching your search.</td></tr>`;
         updatePaginationControls(0);
         return;
     }
@@ -831,19 +854,30 @@ function renderTable(data, highlight = "") {
         const row = document.createElement("tr");
         const actualIndex = startIndex + index + 1;
 
-    const safeName = anime.name.replace(/'/g, "\\'");
-    const isBookmarked = allWatchlists[currentListName] && allWatchlists[currentListName].includes(anime.name);
+        const safeName = anime.name.replace(/'/g, "\\'");
+        const isBookmarked = allWatchlists[currentListName] && allWatchlists[currentListName].includes(anime.name);
+        const imageUrl = anime.image || '';
 
-const imageUrl = anime.image || 'https://via.placeholder.com/50x70?text=No+Image';
+        const highlightedName = highlight 
+            ? anime.name.replace(new RegExp(`(${highlight})`, "gi"), '<span class="highlight">$1</span>') 
+            : anime.name;
 
         row.innerHTML = `
             <td>${actualIndex}</td>
+
+            <!-- COMBINED IMAGE & NAME COLUMN -->
             <td>
-                <img src="${imageUrl}" alt="${safeName}" style="width: 50px; height: 70px; object-fit: cover; border-radius: 4px; display: block;">
+                <div class="anime-card-cell">
+                    <img src="${imageUrl}" alt="${safeName}" class="anime-poster">
+                    <div class="anime-title">
+                        <span>${highlightedName}</span>
+                        <span class="bookmark-btn ${isBookmarked ? 'active' : ''}" onclick="toggleWatchlist('${safeName}', this)">
+                            ${isBookmarked ? '<i class="fa fa-bookmark"></i>' : '<i class="fa fa-bookmark-o"></i>'}
+                        </span>
+                    </div>
+                </div>
             </td>
-            <td>${highlight ? anime.name.replace(new RegExp(`(${highlight})`, "gi"), '<span class="highlight">$1</span>') : anime.name}&nbsp; <span class="bookmark-btn ${isBookmarked ? 'active' : ''}"
-                onclick="toggleWatchlist('${safeName}', this)">
-                ${isBookmarked ? '<i class="fa fa-bookmark"></i>' : '<i class="fa fa-bookmark-o"></i>'}</span></td>
+
             <td>
                 <table class="inner-table">
                     <tr><th>S</th><th>E</th></tr>
@@ -854,10 +888,12 @@ const imageUrl = anime.image || 'https://via.placeholder.com/50x70?text=No+Image
                     }).join('')}
                 </table>
             </td>
+
             <td>
                 <button class="copy-btn" onclick="copyName('${safeName}', this)">Copy Name</button>
                 <button class="search-btn" onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(anime.name)}', '_blank')">Google</button>
             </td>`;
+
         tableBody.appendChild(row);
     });
 
