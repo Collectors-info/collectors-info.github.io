@@ -750,6 +750,12 @@
 .anime-poster {
   cursor: pointer;
 }
+
+/* Automatically hide info bar when search panel has the .open class */
+.search-panel.open ~ #infoBar,
+.search-panel.open + #infoBar {
+    display: none !important;
+}
   </style>
 </head>
 
@@ -769,7 +775,7 @@
   </div>
 </header>
 
-  <div class="info-bar">
+  <div class="info-bar" id="infoBar">
     <div class="legend">
       <span class="color-box"></span>
       <span>= Ongoing Season</span>
@@ -1363,11 +1369,18 @@ const toggleSearch = document.getElementById("toggleSearch");
 const searchPanel = document.getElementById("searchPanel");
 const searchIcon = document.getElementById("searchIcon");
 
+const infoBar = document.getElementById("infoBar"); 
+
 toggleSearch.addEventListener("click", () => {
     const isOpen = searchPanel.classList.toggle("open");
     
     searchIcon.innerHTML = isOpen ? `<i style="color: black;" class="fa fa-remove"></i>` : `<i class="fa fa-search"></i>`;    
     toggleSearch.style.background = isOpen ? "#fff" : "#007bff";
+
+    // 2. Hide or show the info bar depending on search state
+    if (infoBar) {
+        infoBar.style.display = isOpen ? "none" : "";
+    }
 
     if (isOpen) {
         setTimeout(() => searchInput.focus(), 300);
