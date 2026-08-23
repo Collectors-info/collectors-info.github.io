@@ -702,6 +702,54 @@
     font-size: 14px;
     line-height: 1.2;
 }
+
+/* Image Preview Modal Overlay */
+.image-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Enlarged Image Styling */
+.image-modal-content {
+  max-width: 90%;
+  max-height: 85vh;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Close Button (X) */
+.image-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s;
+}
+
+.image-modal-close:hover {
+  color: #ff4d4d;
+}
+
+/* Cursor indicator for anime poster images */
+.anime-poster {
+  cursor: pointer;
+}
   </style>
 </head>
 
@@ -817,6 +865,12 @@
   </footer>
 <div id="toastContainer" class="toast-container"></div>
 
+
+<div id="imageModal" class="image-modal">
+  <span class="image-modal-close" id="closeImageModal">&times;</span>
+  <img class="image-modal-content" id="modalImagePreview" alt="Anime Poster Preview">
+</div>
+
 <script>
 let allWatchlists = JSON.parse(localStorage.getItem("userWatchlists") || '{"Favorites": []}');
 let currentListName = "Favorites";
@@ -837,6 +891,7 @@ let filteredData = [];
 let currentPage = 1;
 const rowsPerPage = 20;
 
+// 1. Render Table Function
 function renderTable(data, highlight = "") {
     tableBody.innerHTML = "";
     
@@ -856,19 +911,21 @@ function renderTable(data, highlight = "") {
 
         const safeName = anime.name.replace(/'/g, "\\'");
         const isBookmarked = allWatchlists[currentListName] && allWatchlists[currentListName].includes(anime.name);
-        const imageUrl = anime.image || '';
 
         const highlightedName = highlight 
-            ? anime.name.replace(new RegExp(`(${highlight})`, "gi"), '<span class="highlight">$1</span>') 
+            ? anime.name.replace(new RegExp(`(${escapeRegExp(highlight)})`, "gi"), '<span class="highlight">$1</span>') 
             : anime.name;
+
+// Image tag updated with onclick handler
+const imageTag = anime.image 
+    ? `<img data-src="${anime.image}" alt="${safeName}" class="anime-poster lazy-img" onclick="openImageModal(this.src || this.dataset.src)">` 
+    : '';
 
         row.innerHTML = `
             <td>${actualIndex}</td>
-
-            <!-- COMBINED IMAGE & NAME COLUMN -->
             <td>
                 <div class="anime-card-cell">
-                    <img src="${imageUrl}" alt="${safeName}" class="anime-poster">
+                    ${imageTag}
                     <div class="anime-title">
                         <span>${highlightedName}</span>
                         <span class="bookmark-btn ${isBookmarked ? 'active' : ''}" onclick="toggleWatchlist('${safeName}', this)">
@@ -877,18 +934,16 @@ function renderTable(data, highlight = "") {
                     </div>
                 </div>
             </td>
-
             <td>
                 <table class="inner-table">
                     <tr><th>S</th><th>E</th></tr>
-                    ${Object.entries(anime.seasons).map(([s, e], i, arr) => {
+                    ${Object.entries(anime.seasons || {}).map(([s, e], i, arr) => {
                         const isLast = i === arr.length - 1;
                         const isOngoing = anime.status === "ongoing" && isLast;
                         return `<tr><td class="${isOngoing ? 'ongoing' : ''}">${s}</td><td class="${isOngoing ? 'ongoing' : ''}">${e}</td></tr>`;
                     }).join('')}
                 </table>
             </td>
-
             <td>
                 <button class="copy-btn" onclick="copyName('${safeName}', this)">Copy Name</button>
                 <button class="search-btn" onclick="window.open('https://www.google.com/search?q=${encodeURIComponent(anime.name)}', '_blank')">Google</button>
@@ -898,7 +953,52 @@ function renderTable(data, highlight = "") {
     });
 
     updatePaginationControls(data.length);
+    
+    // Trigger Lazy Loading after DOM updates
+    initLazyLoading();
 }
+
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// 2. Lazy Loading Observer
+function initLazyLoading() {
+    const lazyImages = document.querySelectorAll('.lazy-img');
+
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const image = entry.target;
+                    image.src = image.dataset.src;
+                    image.classList.remove('lazy-img');
+                    imageObserver.unobserve(image);
+                }
+            });
+        }, {
+            root: tableWrapper || null, // Targets inside scrollable container
+            rootMargin: "50px"
+        });
+
+        lazyImages.forEach(image => imageObserver.observe(image));
+    } else {
+        lazyImages.forEach(image => {
+            image.src = image.dataset.src;
+        });
+    }
+}
+
+// 3. Single Unified Search Event Listener
+searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase().trim();
+    rowInput.value = "";
+    currentPage = 1;
+    tableWrapper.scrollTop = 0; 
+
+    filteredData = animeData.filter(a => a.name.toLowerCase().includes(query));
+    renderTable(filteredData, query);
+});
 
 function updateListSelector() {
     const selector = document.getElementById("listSelector");
@@ -906,13 +1006,13 @@ function updateListSelector() {
         `<option value="${name}" ${name === currentListName ? 'selected' : ''}>${name}</option>`
     ).join('');
 
-updatecount();
+    updatecount();
 }
 
 function updatecount(){
     const count = allWatchlists[currentListName]?.length || 0;
     const viewBtn = document.getElementById("showWatchlist");
-    if (!showingWatchlist) {
+    if (!showingWatchlist && viewBtn) {
         viewBtn.innerHTML = `<i class="fa fa-folder-open"></i> View My List (${count})`;
     }
 }
@@ -951,8 +1051,6 @@ function openModal(title, message, showInput, defaultValue, callback) {
     modal.style.display = "flex";
     if (showInput) setTimeout(() => input.focus(), 100);
 
-    confirmBtn.onclick = null; 
-    
     confirmBtn.onclick = () => {
         if (typeof callback === "function") {
             callback(input.value.trim());
@@ -969,8 +1067,8 @@ window.createNewList = () => {
     openModal("Create New List", "Give your new collection a name:", true, "", (name) => {
         if (!name) return;
         if (allWatchlists[name]) {
-         showToast("Error: A list with this name already exists!", "#dc3545");
-    return;
+            showToast("Error: A list with this name already exists!", "#dc3545");
+            return;
         } else {
             allWatchlists[name] = [];
             currentListName = name;
@@ -989,8 +1087,8 @@ window.renameCurrentList = () => {
     }
     openModal("Rename List", `Enter a new name for "${currentListName}":`, true, currentListName, (newName) => {
         if (newName && newName !== currentListName) {
-          if (allWatchlists[newName]) {
-            showToast("Error: Name already in use!", "#dc3545");
+            if (allWatchlists[newName]) {
+                showToast("Error: Name already in use!", "#dc3545");
             } else {
                 allWatchlists[newName] = allWatchlists[currentListName];
                 delete allWatchlists[currentListName];
@@ -1011,21 +1109,20 @@ window.deleteCurrentList = () => {
     openModal(
         "Delete List", 
         `Are you sure you want to delete "${currentListName}"? This will remove all saved anime in this list forever.`, 
-        false,"", () => {
+        false, "", () => {
             delete allWatchlists[currentListName];
             currentListName = "Favorites";
             
             saveData();
             updateListSelector();
-            
             updatecount();
             
             const viewBtn = document.getElementById("showWatchlist");
             if (viewBtn) viewBtn.style.background = "#6f42c1";
             
-          filteredData = animeData;
-          showingWatchlist = false; 
-          renderTable(filteredData);
+            filteredData = animeData;
+            showingWatchlist = false; 
+            renderTable(filteredData);
             
             showToast("List Deleted Successfully", "#6c757d");
         }
@@ -1122,8 +1219,6 @@ document.getElementById("showWatchlist").addEventListener("click", () => {
         const activeListItems = allWatchlists[currentListName] || [];
         filteredData = animeData.filter(a => activeListItems.includes(a.name));
         
-        const ongoingCount = filteredData.filter(a => a.status === "ongoing").length;
-        
         btn.innerHTML = `<i class="fa fa-th-list"></i> Show All (${animeData.length})`;
         btn.style.background = "#dc3545";
         
@@ -1153,7 +1248,7 @@ function updatePaginationControls(totalItems) {
 }
 
 document.getElementById("jumpPageBtn").addEventListener("click", () => {
-  const jumpBtn = document.getElementById("jumpPageBtn");
+    const jumpBtn = document.getElementById("jumpPageBtn");
     const jumpInput = document.getElementById("jumpPageInput");
     const targetPage = parseInt(jumpInput.value, 10);
     const totalPages = Math.ceil(filteredData.length / rowsPerPage) || 1;
@@ -1163,13 +1258,13 @@ document.getElementById("jumpPageBtn").addEventListener("click", () => {
         renderTable(filteredData, searchInput.value.trim());
         tableWrapper.scrollTop = 0;
     } else {
-    jumpBtn.textContent = "Invalid!";
-    jumpBtn.style.cssText = "background:#dc3545;color:white;border-color:black;"; 
-    setTimeout(() => {
-        jumpBtn.textContent = "Go";
-       jumpBtn.style.cssText = "";
-        jumpInput.value = currentPage;
-    }, 1500);
+        jumpBtn.textContent = "Invalid!";
+        jumpBtn.style.cssText = "background:#dc3545;color:white;border-color:black;"; 
+        setTimeout(() => {
+            jumpBtn.textContent = "Go";
+            jumpBtn.style.cssText = "";
+            jumpInput.value = currentPage;
+        }, 1500);
         jumpInput.value = currentPage;
     }
 });
@@ -1189,16 +1284,6 @@ document.getElementById("nextPage").addEventListener("click", () => {
         renderTable(filteredData, searchInput.value.trim());
         tableWrapper.scrollTop = 0;
     }
-});
-
-searchInput.addEventListener("input", () => {
-    const query = searchInput.value.toLowerCase().trim();
-    rowInput.value = "";
-    currentPage = 1;
-    tableWrapper.scrollTop = 0; 
-    
-    filteredData = animeData.filter(a => a.name.toLowerCase().includes(query));
-    renderTable(filteredData, query);
 });
 
 goBtn.addEventListener("click", () => {
@@ -1304,7 +1389,7 @@ function showToast(message, color = "#28a745") {
     const duplicate = existingToasts.find(t => t.innerText === message);
 
     if (duplicate) {
-      duplicate.remove();
+        duplicate.remove();
     }
 
     const toast = document.createElement("div");
@@ -1319,6 +1404,45 @@ function showToast(message, color = "#28a745") {
         setTimeout(() => toast.remove(), 500);
     }, 3000);
 }
+
+// --- Image Preview Modal Logic ---
+const imageModal = document.getElementById("imageModal");
+const modalImagePreview = document.getElementById("modalImagePreview");
+const closeImageModalBtn = document.getElementById("closeImageModal");
+
+// Function to open image modal
+window.openImageModal = (imageSrc) => {
+    if (!imageSrc) return;
+    modalImagePreview.src = imageSrc;
+    imageModal.style.display = "flex";
+};
+
+// Function to close image modal
+function closeImageModal() {
+    imageModal.style.display = "none";
+    modalImagePreview.src = "";
+}
+
+// 1. Close when clicking the 'X' button
+if (closeImageModalBtn) {
+    closeImageModalBtn.addEventListener("click", closeImageModal);
+}
+
+// 2. Close when clicking anywhere outside the image preview
+if (imageModal) {
+    imageModal.addEventListener("click", (e) => {
+        if (e.target === imageModal) {
+            closeImageModal();
+        }
+    });
+}
+
+// 3. Close when pressing the 'Escape' key
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && imageModal.style.display === "flex") {
+        closeImageModal();
+    }
+});
 </script>
 </body>
 
